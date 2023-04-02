@@ -5,14 +5,16 @@ export function httpStore(url, options = {}) {
   let data
 
   const initialValue = { loading: true }
-  const store = readable(initialValue, setter => set = setter)
+  const store = readable(initialValue, (setter) => {
+    set = setter
+  })
 
   get(store)
 
   store.fetch = async (url, options = {}) => {
     set({ loading: true, ...data })
 
-    data = await fetch(url, options).then(r => r.json())
+    data = await fetch(url, options).then((r) => r.json())
 
     set({ loading: false, ...data })
   }

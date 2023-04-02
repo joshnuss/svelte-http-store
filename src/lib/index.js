@@ -8,15 +8,14 @@ export function httpStore(url, options = {}) {
   })
 
   store.fetch = async (url, options = {}) => {
-    await fetch(url, options)
-      .then((response) => response.json())
-      .then((json) => {
-        set({ loading: false, ...json })
-      })
+    const response = await fetch(url, options)
+    const json = await response.json()
+
+    set({ loading: false, ...json })
   }
 
-  store.refresh = async () => {
-    await store.fetch(url, options)
+  store.refresh = () => {
+    return store.fetch(url, options)
   }
 
   store.refresh()

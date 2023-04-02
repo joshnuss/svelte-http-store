@@ -7,15 +7,18 @@ describe('httpStore', () => {
     global.fetch = vi.fn()
   })
 
-  test('initial state is loading', () => {
+  test('initial state is loading', async () => {
     fetch.mockResolvedValueOnce({
       json: () => {}
     })
 
     const store = httpStore('/cart')
+
+    await flushPromises()
+
     const value = get(store)
 
-    expect(value).toEqual({ loading: true })
+    expect(value).toEqual({ loading: false })
     expect(fetch).toBeCalledWith('/cart', {})
   })
 
@@ -57,6 +60,7 @@ describe('httpStore', () => {
 
     expect(values).toEqual([
       { loading: true },
+      { loading: true },
       {
         loading: false,
         someValue: 41
@@ -88,6 +92,7 @@ describe('httpStore', () => {
     await store.fetch('/cart', { method: 'PATCH' })
 
     expect(values).toEqual([
+      { loading: true },
       { loading: true },
       {
         loading: false,

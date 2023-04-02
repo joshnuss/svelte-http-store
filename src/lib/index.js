@@ -1,17 +1,20 @@
-import { readable } from 'svelte/store'
+import { readable, get } from 'svelte/store'
 
 export function httpStore(url, options = {}) {
   let set
+  let data
+
   const initialValue = { loading: true }
-  const store = readable(initialValue, (setter) => {
-    set = setter
-  })
+  const store = readable(initialValue, setter => set = setter)
+
+  get(store)
 
   store.fetch = async (url, options = {}) => {
-    const response = await fetch(url, options)
-    const json = await response.json()
+    set({ loading: true, ...data })
 
-    set({ loading: false, ...json })
+    data = await fetch(url, options).then(r => r.json())
+
+    set({ loading: false, ...data })
   }
 
   store.refresh = () => {

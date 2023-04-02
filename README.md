@@ -24,7 +24,7 @@ store.refresh()
 store.fetch('/cart', { method: 'PATCH' })
 ```
 
-Feel free to wrap the `store.fetch()` with a function that matches your domain:
+Feel free to wrap the `store.fetch()` with functions that fit your domain:
 
 ```javascript
 // example: function to add items to the cart

@@ -1,58 +1,46 @@
-# create-svelte
+# svelte-http-store
 
-Everything you need to build a Svelte library, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/master/packages/create-svelte).
+A [Svelte store](https://svelte.dev/docs#run-time-svelte-store) backed by the [`fetch`](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API) API.
 
-Read more about creating a library [in the docs](https://kit.svelte.dev/docs/packaging).
+## Installation
 
-## Creating a project
-
-If you're seeing this, you've probably already done this step. Congrats!
-
-```bash
-# create a new project in the current directory
-npm create svelte@latest
-
-# create a new project in my-app
-npm create svelte@latest my-app
+```sh
+pnpm install -D svelte-http-store
 ```
 
-## Developing
+## Example
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+```javascript
+// in src/lib/stores/cart.js
+import { httpStore } from 'svelte-http-store'
 
-```bash
-npm run dev
+// performs a `GET /cart` request
+export const store = httpStore('/cart')
 
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
+// store.refresh() will request `GET /cart` again
+store.refresh()
+
+// call store.fetch() to mutate:
+store.fetch('/cart', { method: 'PATCH' })
 ```
 
-Everything inside `src/lib` is part of your library, everything inside `src/routes` can be used as a showcase or preview app.
+Feel free to wrap the `store.fetch()` with a function that matches your domain:
 
-## Building
+```javascript
+// example: function to add items to the cart
+store.add = ({ product, quantity }) => {
+  const url = `/cart/${product.id}`
+  const body = JSON.stringify({ quantity })
 
-To build your library:
+  cart.fetch(url, { method: 'POST', body })
+}
 
-```bash
-npm run package
+// example: function to clear the cart
+store.clear = () => {
+  cart.fetch('/cart', { method: 'DELETE' })
+}
 ```
 
-To create a production version of your showcase app:
+## License
 
-```bash
-npm run build
-```
-
-You can preview the production build with `npm run preview`.
-
-> To deploy your app, you may need to install an [adapter](https://kit.svelte.dev/docs/adapters) for your target environment.
-
-## Publishing
-
-Go into the `package.json` and give your package the desired name through the `"name"` option. Also consider adding a `"license"` field and point it to a `LICENSE` file which you can create from a template (one popular option is the [MIT license](https://opensource.org/license/mit/)).
-
-To publish your library to [npm](https://www.npmjs.com):
-
-```bash
-npm publish
-```
+MIT

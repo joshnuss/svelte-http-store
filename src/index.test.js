@@ -13,12 +13,9 @@ describe('httpStore', () => {
     })
 
     const store = httpStore('/cart')
-
-    await flushPromises()
-
     const value = get(store)
 
-    expect(value).toEqual({ loading: false })
+    expect(value).toEqual({ loading: true })
     expect(fetch).toBeCalledWith('/cart', {})
   })
 

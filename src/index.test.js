@@ -1,5 +1,5 @@
 import { describe, test, expect, beforeEach, vi } from 'vitest'
-import { httpStore } from './index'
+import { httpStore } from '$lib/index'
 import { get } from 'svelte/store'
 
 describe('httpStore', () => {
